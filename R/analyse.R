@@ -5,12 +5,12 @@ library(dplyr)
 
 source(here("R", "read.R"))
 
-ts <- here("data", "2024-01-hours.xlsx")
-sheets <- tidyxl::xlsx_sheet_names(ts)
-sheets <- sheets[1:length(sheets)-1]
+ts <- list.files(here("data"), full.names = TRUE)
 
-data <- sheets |> 
-  purrr::map(\(x) read_timesheet(xlsx = ts, sheet = x)) |> 
-  bind_rows()
+data <- ts |> 
+  purrr::map(read_ts_workbook) |> 
+  # purrr::map(\(x) read_timesheet(xlsx = ts, sheet = x)) |> 
+  bind_rows() |> 
+  mutate(io = coalesce(credit, note))
 
-data |>  count(note)
+data |>  count(io)
