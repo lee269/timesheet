@@ -13,4 +13,4 @@ data <- sheets |>
   purrr::map(\(x) read_timesheet(xlsx = ts, sheet = x)) |> 
   bind_rows()
 
-data |> count(note)
+data |>  count(note)
