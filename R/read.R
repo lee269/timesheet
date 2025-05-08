@@ -17,3 +17,14 @@ read_timesheet <- function(xlsx, sheet) {
 
 }
 
+
+read_ts_workbook <- function(xlsx) {
+
+  sheets <- tidyxl::xlsx_sheet_names(xlsx)
+  sheets <- sheets[1:length(sheets)-1]
+  
+  data <- sheets |> 
+    purrr::map(\(x) read_timesheet(xlsx = xlsx, sheet = x)) |> 
+    bind_rows()
+  return(data)
+}
